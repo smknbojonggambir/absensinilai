@@ -5,33 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aplikasi Absensi & Nilai</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
 </head>
 <body class="login-body">
   <!-- LOGIN -->
   <div id="loginPage" class="login-box">
-    <h1>Login Admin</h1>
+    <h1><i class="fas fa-user-shield"></i> Login Admin</h1>
     <form id="loginForm">
       <input type="text" id="username" placeholder="Username" required />
       <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Masuk</button>
+      <button type="submit"><i class="fas fa-sign-in-alt"></i> Masuk</button>
     </form>
     <p id="loginError"></p>
   </div>
 
   <!-- DASHBOARD -->
   <div id="dashboardPage" class="dashboard hidden">
-    <h2>Selamat Datang, Admin</h2>
+    <h2><i class="fas fa-tachometer-alt"></i> Selamat Datang, Admin</h2>
     <div class="menu-grid">
-      <button onclick="showPage('absensiPage')" class="menu-card">Input Absensi</button>
-      <button onclick="showPage('nilaiPage')" class="menu-card">Input Nilai</button>
-      <button onclick="showPage('laporanPage')" class="menu-card">Lihat Laporan</button>
-      <button onclick="logout()" class="menu-card danger">Keluar</button>
+      <button onclick="showPage('absensiPage')" class="menu-card"><i class="fas fa-calendar-check"></i> Input Absensi</button>
+      <button onclick="showPage('nilaiPage')" class="menu-card"><i class="fas fa-graduation-cap"></i> Input Nilai</button>
+      <button onclick="showPage('laporanPage')" class="menu-card"><i class="fas fa-chart-bar"></i> Lihat Laporan</button>
+      <button onclick="logout()" class="menu-card danger"><i class="fas fa-sign-out-alt"></i> Keluar</button>
     </div>
   </div>
 
   <!-- ABSENSI -->
   <div id="absensiPage" class="form-container hidden">
-    <h2>Form Absensi</h2>
+    <h2><i class="fas fa-calendar-check"></i> Form Absensi</h2>
     <form id="absensiForm">
       <input type="month" id="bulan" required>
       <input type="date" id="tanggal" required>
@@ -47,140 +48,42 @@
         <option>Sakit</option>
         <option>Alpha</option>
       </select>
-      <button type="submit">Simpan</button>
+      <button type="submit"><i class="fas fa-save"></i> Simpan</button>
     </form>
-    <button onclick="showPage('dashboardPage')">Kembali ke Dashboard</button>
+    <button onclick="showPage('dashboardPage')" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
     <div id="absensiData"></div>
   </div>
 
   <!-- NILAI -->
-  <div id="nilaiPage" class="form-container hidden">
-    <h2>Form Nilai</h2>
-    <form id="nilaiForm">
-      <input type="month" id="bulanNilai" required>
-      <select id="namaNilai" required></select>
-      <select id="kelasNilai" required></select>
-      <select id="mapelNilai">
-        <option>Dasar-dasar DKV</option>
-        <option>Informatika</option>
-      </select>
-      <input type="number" id="tugas1" placeholder="Tugas 1" required>
-      <input type="number" id="tugas2" placeholder="Tugas 2" required>
-      <input type="number" id="ulangan" placeholder="Ulangan" required>
-      <input type="number" id="praktek" placeholder="Praktek" required>
-      <button type="submit">Simpan</button>
-    </form>
-    <button onclick="showPage('dashboardPage')">Kembali ke Dashboard</button>
-    <div id="nilaiData"></div>
-  </div>
+<div id="nilaiPage" class="form-container hidden">
+  <h2><i class="fas fa-graduation-cap"></i> Form Nilai</h2>
+  <form id="nilaiForm">
+    <input type="month" id="bulanNilai" required>
+    <select id="namaNilai" required></select>
+    <select id="kelasNilai" required></select>
+    <select id="mapelNilai">
+      <option>Dasar-dasar DKV</option>
+      <option>Informatika</option>
+    </select>
+    <input type="number" id="nilai1" placeholder="Nilai 1" required>
+    <input type="number" id="nilai2" placeholder="Nilai 2" required>
+    <input type="number" id="nilai3" placeholder="Nilai 3" required>
+    <input type="number" id="nilai4" placeholder="Nilai 4" required>
+    <button type="submit"><i class="fas fa-save"></i> Simpan</button>
+  </form>
+  <button onclick="showPage('dashboardPage')" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
+  <div id="nilaiData"></div>
+</div>
+
 
   <!-- LAPORAN -->
   <div id="laporanPage" class="form-container hidden">
-    <h2>Laporan Absensi dan Nilai</h2>
-    <button onclick="showPage('dashboardPage')">Kembali ke Dashboard</button>
+    <h2><i class="fas fa-chart-bar"></i> Laporan Absensi dan Nilai</h2>
+    <button onclick="showPage('dashboardPage')" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
     <div id="laporanAbsensi"></div>
     <div id="laporanNilai"></div>
   </div>
 
-  <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIH6WrrYa2y9sfxgw7_kujhmFgs9rCoSYbfTmmfSoJhr1aEvHmbvyjoTXPpvWXHxT/exec';
-
-  document.addEventListener('DOMContentLoaded', () => {
-    showPage('loginPage');
-    fetchSiswa();
-  });
-
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      if (user === 'admin' && pass === '12345') {
-        showPage('dashboardPage');
-      } else {
-        document.getElementById('loginError').textContent = 'Login gagal';
-      }
-    });
-  }
-
-  function showPage(pageId) {
-    document.querySelectorAll('body > div').forEach(el => el.classList.add('hidden'));
-    document.getElementById(pageId).classList.remove('hidden');
-  }
-
-  function logout() {
-    showPage('loginPage');
-  }
-
-  function fetchSiswa() {
-    fetch(`${scriptURL}?action=getsiswa`)
-      .then(res => res.json())
-      .then(data => {
-        const namaList = [document.getElementById('nama'), document.getElementById('namaNilai')];
-        const kelasList = [document.getElementById('kelas'), document.getElementById('kelasNilai')];
-        data.forEach(siswa => {
-          namaList.forEach(namaSel => {
-            if (namaSel) {
-              const opt = document.createElement('option');
-              opt.value = siswa.nama;
-              opt.textContent = siswa.nama;
-              namaSel.appendChild(opt);
-            }
-          });
-          kelasList.forEach(kelasSel => {
-            if (kelasSel && ![...kelasSel.options].some(o => o.value === siswa.kelas)) {
-              const opt = document.createElement('option');
-              opt.value = siswa.kelas;
-              opt.textContent = siswa.kelas;
-              kelasSel.appendChild(opt);
-            }
-          });
-        });
-      });
-  }
-
-  const absensiForm = document.getElementById('absensiForm');
-  if (absensiForm) {
-    absensiForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const data = {
-        action: 'addAbsensi',
-        bulan: document.getElementById('bulan').value,
-        tanggal: document.getElementById('tanggal').value,
-        nama: document.getElementById('nama').value,
-        kelas: document.getElementById('kelas').value,
-        mapel: document.getElementById('mapel').value,
-        status: document.getElementById('status').value
-      };
-      fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      }).then(res => res.text()).then(alert);
-    });
-  }
-
-  const nilaiForm = document.getElementById('nilaiForm');
-  if (nilaiForm) {
-    nilaiForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const data = {
-        action: 'addNilai',
-        bulan: document.getElementById('bulanNilai').value,
-        nama: document.getElementById('namaNilai').value,
-        kelas: document.getElementById('kelasNilai').value,
-        mapel: document.getElementById('mapelNilai').value,
-        tugas1: document.getElementById('tugas1').value,
-        tugas2: document.getElementById('tugas2').value,
-        ulangan: document.getElementById('ulangan').value,
-        praktek: document.getElementById('praktek').value
-      };
-      fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      }).then(res => res.text()).then(alert);
-    });
-  }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
