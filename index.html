@@ -15,7 +15,7 @@
       <input type="password" id="password" placeholder="Password" required />
       <button type="submit">Masuk</button>
     </form>
-    <p id="loginError"></p>
+    <p id="loginError" style="color: red;"></p>
   </div>
 
   <!-- DASHBOARD -->
@@ -37,11 +37,12 @@
       <input type="date" id="tanggal" required>
       <select id="nama" required></select>
       <select id="kelas" required></select>
-      <select id="mapel">
+      <select id="mapel" required>
+        <option value="">Pilih Mapel</option>
         <option>Dasar-dasar DKV</option>
         <option>Informatika</option>
       </select>
-      <select id="status">
+      <select id="status" required>
         <option>Hadir</option>
         <option>Izin</option>
         <option>Sakit</option>
@@ -59,7 +60,8 @@
       <input type="month" id="bulanNilai" required>
       <select id="namaNilai" required></select>
       <select id="kelasNilai" required></select>
-      <select id="mapelNilai">
+      <select id="mapelNilai" required>
+        <option value="">Pilih Mapel</option>
         <option>Dasar-dasar DKV</option>
         <option>Informatika</option>
       </select>
@@ -75,71 +77,74 @@
   <!-- LAPORAN -->
   <div id="laporanPage" class="form-container hidden">
     <h2>Laporan Absensi dan Nilai</h2>
-    <div id="laporanAbsensi"></div>
-    <div id="laporanNilai"></div>
+    <div id="laporanAbsensi">Tampilkan laporan di sini...</div>
+    <div id="laporanNilai">Tampilkan laporan di sini...</div>
   </div>
 
   <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIH6WrrYa2y9sfxgw7_kujhmFgs9rCoSYbfTmmfSoJhr1aEvHmbvyjoTXPpvWXHxT/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIH6WrrYa2y9sfxgw7_kujhmFgs9rCoSYbfTmmfSoJhr1aEvHmbvyjoTXPpvWXHxT/exec';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    showPage('loginPage');
-    fetchSiswa();
-  });
-
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const user = document.getElementById('username').value;
-      const pass = document.getElementById('password').value;
-      if (user === 'admin' && pass === '12345') {
-        showPage('dashboardPage');
-      } else {
-        document.getElementById('loginError').textContent = 'Login gagal';
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      showPage('loginPage');
     });
-  }
 
-  function showPage(pageId) {
-    document.querySelectorAll('body > div').forEach(el => el.classList.add('hidden'));
-    document.getElementById(pageId).classList.remove('hidden');
-  }
+    function showPage(pageId) {
+      document.querySelectorAll('body > div').forEach(el => el.classList.add('hidden'));
+      document.getElementById(pageId).classList.remove('hidden');
+    }
 
-  function logout() {
-    showPage('loginPage');
-  }
+    function logout() {
+      showPage('loginPage');
+    }
 
-  function fetchSiswa() {
-    fetch(`${scriptURL}?action=getsiswa`)
-      .then(res => res.json())
-      .then(data => {
-        const namaList = [document.getElementById('nama'), document.getElementById('namaNilai')];
-        const kelasList = [document.getElementById('kelas'), document.getElementById('kelasNilai')];
-        data.forEach(siswa => {
-          namaList.forEach(namaSel => {
-            if (namaSel) {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if (user === 'admin' && pass === '12345') {
+          showPage('dashboardPage');
+          fetchSiswa();
+        } else {
+          document.getElementById('loginError').textContent = 'Login gagal. Username atau password salah.';
+        }
+      });
+    }
+
+    function fetchSiswa() {
+      fetch(`${scriptURL}?action=getsiswa`)
+        .then(res => res.json())
+        .then(data => {
+          const namaList = [document.getElementById('nama'), document.getElementById('namaNilai')];
+          const kelasList = [document.getElementById('kelas'), document.getElementById('kelasNilai')];
+
+          namaList.forEach(sel => sel.innerHTML = '<option value="">Pilih Nama</option>');
+          kelasList.forEach(sel => sel.innerHTML = '<option value="">Pilih Kelas</option>');
+
+          const kelasSet = new Set();
+
+          data.forEach(siswa => {
+            namaList.forEach(namaSel => {
               const opt = document.createElement('option');
               opt.value = siswa.nama;
               opt.textContent = siswa.nama;
               namaSel.appendChild(opt);
-            }
-          });
-          kelasList.forEach(kelasSel => {
-            if (kelasSel && ![...kelasSel.options].some(o => o.value === siswa.kelas)) {
-              const opt = document.createElement('option');
-              opt.value = siswa.kelas;
-              opt.textContent = siswa.kelas;
-              kelasSel.appendChild(opt);
+            });
+            if (!kelasSet.has(siswa.kelas)) {
+              kelasSet.add(siswa.kelas);
+              kelasList.forEach(kelasSel => {
+                const opt = document.createElement('option');
+                opt.value = siswa.kelas;
+                opt.textContent = siswa.kelas;
+                kelasSel.appendChild(opt);
+              });
             }
           });
         });
-      });
-  }
+    }
 
-  const absensiForm = document.getElementById('absensiForm');
-  if (absensiForm) {
-    absensiForm.addEventListener('submit', e => {
+    document.getElementById('absensiForm')?.addEventListener('submit', function (e) {
       e.preventDefault();
       const data = {
         action: 'addAbsensi',
@@ -155,11 +160,8 @@
         body: JSON.stringify(data)
       }).then(res => res.text()).then(alert);
     });
-  }
 
-  const nilaiForm = document.getElementById('nilaiForm');
-  if (nilaiForm) {
-    nilaiForm.addEventListener('submit', e => {
+    document.getElementById('nilaiForm')?.addEventListener('submit', function (e) {
       e.preventDefault();
       const data = {
         action: 'addNilai',
@@ -177,7 +179,6 @@
         body: JSON.stringify(data)
       }).then(res => res.text()).then(alert);
     });
-  }
   </script>
 </body>
 </html>
