@@ -55,26 +55,42 @@
   </div>
 
   <!-- NILAI -->
-<div id="nilaiPage" class="form-container hidden">
-  <h2><i class="fas fa-graduation-cap"></i> Form Nilai</h2>
-  <form id="nilaiForm">
-    <input type="month" id="bulanNilai" required>
-    <select id="namaNilai" required></select>
-    <select id="kelasNilai" required></select>
-    <select id="mapelNilai">
-      <option>Dasar-dasar DKV</option>
-      <option>Informatika</option>
-    </select>
-    <input type="number" id="nilai1" placeholder="Nilai 1" required>
-    <input type="number" id="nilai2" placeholder="Nilai 2" required>
-    <input type="number" id="nilai3" placeholder="Nilai 3" required>
-    <input type="number" id="nilai4" placeholder="Nilai 4" required>
-    <button type="submit"><i class="fas fa-save"></i> Simpan</button>
-  </form>
-  <button onclick="showPage('dashboardPage')" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
-  <div id="nilaiData"></div>
-</div>
+  <div id="nilaiPage" class="form-container hidden">
+    <h2><i class="fas fa-graduation-cap"></i> Form Nilai</h2>
+    <form id="nilaiForm">
+      <input type="month" id="bulanNilai" required>
+      <select id="namaNilai" required></select>
+      <select id="kelasNilai" required></select>
+      <select id="mapelNilai">
+        <option>Dasar-dasar DKV</option>
+        <option>Informatika</option>
+      </select>
 
+      <label for="jenisNilai">Jenis Nilai</label>
+      <select id="jenisNilai" required>
+        <option value="">-- Pilih Jenis Nilai --</option>
+        <option value="Tugas">Tugas</option>
+        <option value="Ulangan">Ulangan</option>
+        <option value="Praktek">Praktek</option>
+      </select>
+
+      <label for="keNilai">Ke-</label>
+      <select id="keNilai" required>
+        <option value="">-- Keberapa --</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+
+      <label for="nilai">Nilai</label>
+      <input type="number" id="nilai" placeholder="Nilai (0-100)" required>
+
+      <button type="submit"><i class="fas fa-save"></i> Simpan</button>
+    </form>
+    <button onclick="showPage('dashboardPage')" class="back-button"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</button>
+    <div id="nilaiData"></div>
+  </div>
 
   <!-- LAPORAN -->
   <div id="laporanPage" class="form-container hidden">
