@@ -83,10 +83,10 @@ if (nilaiForm) {
       nama: document.getElementById('namaNilai').value,
       kelas: document.getElementById('kelasNilai').value,
       mapel: document.getElementById('mapelNilai').value,
-      tugas1: document.getElementById('tugas1').value,
-      tugas2: document.getElementById('tugas2').value,
-      ulangan: document.getElementById('ulangan').value,
-      praktek: document.getElementById('praktek').value
+      nilai1: document.getElementById('nilai1').value,
+      nilai2: document.getElementById('nilai2').value,
+      nilai3: document.getElementById('nilai3').value,
+      nilai4: document.getElementById('nilai4').value
     };
     fetch(scriptURL, {
       method: 'POST',
@@ -94,3 +94,4 @@ if (nilaiForm) {
     }).then(res => res.text()).then(alert);
   });
 }
+
