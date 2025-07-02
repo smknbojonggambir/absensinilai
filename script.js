@@ -1,5 +1,5 @@
 // Ganti dengan URL Web App Google Apps Script Anda
-const scriptURL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIH6WrrYa2y9sfxgw7_kujhmFgs9rCoSYbfTmmfSoJhr1aEvHmbvyjoTXPpvWXHxT/exec';
 
 // Login
 const loginForm = document.getElementById('loginForm');
